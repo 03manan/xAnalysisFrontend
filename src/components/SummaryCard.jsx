@@ -99,25 +99,7 @@ const Summary = () => {
         boxShadow: '0 2px 12px rgba(0,0,0,0.03)',
         p: 4
       }}>
-        <Typography
-          variant="h4"
-          sx={{
-            color: '#1a237e',
-            fontWeight: 600,
-            mb: 1
-          }}
-        >
-          Summary
-        </Typography>
-        <Typography
-          sx={{
-            color: '#9fa8da',
-            mb: 1
-          }}
-        >
-          Here you can find more details about the Zomato. It will Keep 
-          you engaged by providing meaningful information.
-        </Typography>
+        
         
         {projects.map((project, index) => (
           <ProjectCard

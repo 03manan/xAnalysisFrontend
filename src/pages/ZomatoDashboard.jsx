@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
+
 import {
   Box,
   Card,
@@ -20,6 +21,9 @@ import {
 import { Car, Twitter } from "lucide-react";
 import CompCard from "../components/CompCard";
 import SummaryCard from "../components/SummaryCard";
+import StackedBarChart from "../components/StackedBarChart";
+import HorizontalBarChart from "../components/HorizontalBarChart";
+import useWebSocket from '../hooks/useWebSocket';
 
 // Sample data
 const graphData = [
@@ -39,6 +43,37 @@ const tweet = {
 };
 
 const ZomatoDashboard = () => {
+  const [categorySentimets, setCategorySentimets] = useState([]);
+  const [engagement, setEngagement] = useState([]);
+  const [tweetsProcessed, setTweetsProcessed] = useState(0);
+  const [sentimentScore, setSentimentScore] = useState(0);
+  const [summary, setSummary] = useState("");
+
+  // Connect to the WebSocket for the "zomato" keyword
+  const { data, error } = useWebSocket("ws://127.0.0.1:8000/ws/keyword/zomato/");
+
+  useEffect(() => {
+    if (data) {
+      // Handle data received from the WebSocket
+      if (data.type === "graph_statistics") {
+          console.log(data.data.data);
+          setCategorySentimets(data.data.data.category_sentiments);
+          setSentimentScore(data.data.data.overall_sentiment_score);
+         
+          setEngagement(data.data.data.engagement);
+        // console.log(data.type);
+      } else if (data.type === "summary") {
+        // setSummary(data.data);
+        console.log(data.type);
+      } else if (data.type === "stats") {
+        setTweetsProcessed(data.data.tweets_processed);
+        setSentimentScore(data.data.overall_sentiment_score);
+      }
+    }
+  }, [data]);
+
+ 
+
   return (
     <Box
       p={4}
@@ -46,44 +81,77 @@ const ZomatoDashboard = () => {
         backgroundColor: "#f5f5f5",
         display: "flex",
         flexWrap: "wrap",
-        gap: 2,
+        gap: 6,
       }}
     >
       {/* Graphs Section */}
-      <Box flex="1 1 60%" sx={{ minWidth: 300 }}>
-        <Card
-          sx={{
-            backgroundColor: "#fff",
-            boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-            borderRadius: "20px",
-          }}
-        >
-          <CardHeader title="Zomato Insights" sx={{ color: "#2d3748" }} />
-          <CardContent>
-            <ResponsiveContainer width="100%" height={200}>
-              <LineChart data={graphData}>
-                <XAxis dataKey="name" stroke="#718096" />
-                <YAxis stroke="#718096" />
-                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="value" stroke="#667eea" />
-              </LineChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-      </Box>
+      <Box 
+  flex="1 1 auto" // Adjusting flex-grow and shrink
+  sx={{ 
+    minWidth: 200, // Set a smaller minimum width
+    maxWidth: 600, // Constrain maximum width
+    width: "100%" // You can adjust the percentage or set a fixed width like "250px"
+  }}
+>
+  <Card
+    sx={{
+      backgroundColor: "#fff",
+      boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+      borderRadius: "20px",
+    }}
+  >
+    <CardHeader sx={{ color: "#2d3748" }} />
+    <CardContent>
+      {/* <ResponsiveContainer width="100%" height={200}> */}
+        <StackedBarChart data = {categorySentimets}/>
+      {/* </ResponsiveContainer> */}
+    </CardContent>
+  </Card>
+</Box>
+
+<Box 
+  flex="1 1 auto" // Adjusting flex-grow and shrink
+  sx={{ 
+    minWidth: 200, // Set a smaller minimum width
+    maxWidth: 500, // Constrain maximum width
+    width: "70%" // You can adjust the percentage or set a fixed width like "250px"
+  }}
+>
+  <Card
+    sx={{
+      backgroundColor: "#fff",
+      boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+      borderRadius: "20px",
+    }}
+  >
+    <CardHeader sx={{ color: "#2d3748" }} />
+    <CardContent>
+      {/* <ResponsiveContainer width="100%" height={200}> */}
+        <HorizontalBarChart data={engagement}/>
+      {/* </ResponsiveContainer> */}
+    </CardContent>
+  </Card>
+</Box>
+
 
       {/* tweets processed and sentimental score cards*/}
-      <div style={{ display: "flex", flexDirection: "column" }}>
+      {/* <div style={{ display: "flex", flexDirection: "column" }}>
         <CompCard heading="Tweets Processed" value="24789" />
         <CompCard heading="Tweets Processed" value="24789" />
-      </div>
-
+      </div> */}
+<Box
+flex="1 1 auto" // Adjusting flex-grow and shrink
+sx={{ 
+  minWidth: 200, // Set a smaller minimum width
+  maxWidth: 500, // Constrain maximum width
+  width: "100%" // You can adjust the percentage or set a fixed width like "250px"
+}}
+>
           {/* summary box */}
-      <div style={{ display: "flex", width: "76%" }}>
+      {/* <div style={{ display: "flex", width: "100%" }}> */}
         <SummaryCard />
-      </div>
+      {/* </div> */}
+      </Box>
     </Box>
   );
 };
