@@ -133,12 +133,36 @@ const ZomatoDashboard = () => {
   </Card>
 </Box>
 
+<Box 
+  flex="1 1 auto" // Adjusting flex-grow and shrink
+  sx={{ 
+    minWidth: 200, // Set a smaller minimum width
+    maxWidth: 500, // Constrain maximum width
+    width: "20%" // You can adjust the percentage or set a fixed width like "250px"
+  }}
+>
+  <Card
+    sx={{
+      backgroundColor: "#fff",
+      boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+      borderRadius: "20px",
+    }}
+  >
+    <CardHeader sx={{ color: "#2d3748" }} />
+    <CardContent>
+      {/* <ResponsiveContainer width="100%" height={200}> */}
+        <HorizontalBarChart data={engagement}/>
+      {/* </ResponsiveContainer> */}
+    </CardContent>
+  </Card>
+</Box>
+
 
       {/* tweets processed and sentimental score cards*/}
-      {/* <div style={{ display: "flex", flexDirection: "column" }}>
+      <div style={{ display: "flex", flexDirection: "column" }}>
         <CompCard heading="Tweets Processed" value="24789" />
         <CompCard heading="Tweets Processed" value="24789" />
-      </div> */}
+      </div>
 <Box
 flex="1 1 auto" // Adjusting flex-grow and shrink
 sx={{ 

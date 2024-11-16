@@ -5,7 +5,7 @@ import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts";
 const StackedBarChart = ({ data }) => {
   return (
     <ResponsiveContainer width="100%" height={160}>
-      <BarChart data={data} barSize={20}>
+      <BarChart data={data} barSize={40}>
         <XAxis dataKey="name" /> {/* Display category names */}
         <Bar dataKey="positive" stackId="a" fill="#8A6DED" />
         <Bar dataKey="neutral" stackId="a" fill="#6FC9F6" />

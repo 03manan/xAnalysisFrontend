@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Result from "./pages/result";
 import Home from "./pages/home";
 import ZomatoDashboard from "./pages/ZomatoDashboard.jsx";
+import GraphSection from "./components/GraphSection.jsx";
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
         <Route path="/result/:keyword" element={<ZomatoDashboard />} />
       </Routes>
     </Router>
+    // <GraphSection/>
   );
 }
 
